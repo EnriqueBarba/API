@@ -4,7 +4,7 @@ const userController = require('../controllers/user.controller');
 const upload = require('./cloudinary.config');
 const authMiddleware = require('../middlewares/auth.middleware')
 
-router.post('/register', userController.new);
+router.post('/register', authMiddleware.isNotAuthenticated, userController.new);
 router.post('/login', authMiddleware.isNotAuthenticated, userController.login);
 router.post('/logout', authMiddleware.isAuthenticated, userController.logout);
 
