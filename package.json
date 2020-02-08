@@ -1,0 +1,27 @@
+{
+  "name": "proy_3_api",
+  "version": "1.0.0",
+  "description": "API for Ironhack 3rd proyect",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Enrique Barbadillo Alonso",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.8",
+    "cloudinary": "^1.19.0",
+    "connect-mongo": "^3.2.0",
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
+    "debug": "^4.1.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "http-errors": "^1.7.3",
+    "mongoose": "^5.8.11",
+    "morgan": "^1.9.1",
+    "multer": "^1.4.2",
+    "multer-storage-cloudinary": "^2.2.1"
+  }
+}
