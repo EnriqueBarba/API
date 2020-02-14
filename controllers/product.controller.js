@@ -34,8 +34,8 @@ module.exports.update = (req,res,next) => {
 }
 
 module.exports.delete = (req,res,next) => {
-
-    if ( JSON.stringify(req.body.owner) === JSON.stringify(req.session.user.id) ) {
+    console.info(req.body.owner)
+    if ( req.body.owner === req.session.user.id ) {
         Product.findByIdAndDelete(req.body.id)
             .then(() => res.status(204).json())
             .catch(next)
@@ -51,13 +51,11 @@ module.exports.getAll = (req,res,next) => {
 }
 
 module.exports.searchByCat = (req,res,next) => {
-
-    const category = req.query
+    
     const criteria = {};
-  
-    if (category) {
+    if (req.params.cat) {
       criteria.categories = {
-        $all: category.split(',')
+        $all: req.params.cat.split(',')
       }
     }
 

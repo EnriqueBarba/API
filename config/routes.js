@@ -14,10 +14,10 @@ router.post('/logout', authMiddleware.isAuthenticated, userController.logout);
 router.patch('/profile', authMiddleware.isAuthenticated, userController.updateProfile);
 
 router.get('/products', productController.getAll)
-router.get('/search', productController.searchByCat)
+router.get('/search/:cat', productController.searchByCat)
 router.post('/product/new', authMiddleware.isAuthenticated, upload.array('image'), productController.new)
 router.post('/product/update', authMiddleware.isAuthenticated, upload.array('image'), productController.update)
-router.post('/product/delete', authMiddleware.isAuthenticated, productController.delete)
+router.delete('/product/delete', authMiddleware.isAuthenticated, productController.delete)
 
 
 
