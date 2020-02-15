@@ -1,5 +1,6 @@
 const Cart = require('../models/cart.model');
 const Order = require('../models/order.model');
+const Payment = require('../models/payment.model');
 const createError = require('http-errors');
 
 module.exports.get = (req,res,next) =>{
@@ -64,6 +65,30 @@ module.exports.add = (req,res,next) =>{
 
 module.exports.update = (req,res,next) => {
     Cart.findByIdAndUpdate(req.body.id, req.body, {new:true})
+        .populate('order')
         .then(c => res.json(c))
+        .catch(next)
+}
+
+module.exports.purchase = (req, res, next) => {
+    Cart.findOne({user: req.session.user.id})
+        .then(c => {
+            Promise.all(c.order).then(o =>{
+                const payment = new Payment({
+                    order: o
+                })
+                payment.save()
+                }
+            )
+            c.order = []
+            c.save()
+            // c.order.forEach(o => {
+            //     const payment = new Payment({
+            //         order: o.id
+            //     })
+            //     payment.save()
+            // })
+        })
+        .then(() => res.status(201).json())
         .catch(next)
 }

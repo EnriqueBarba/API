@@ -26,10 +26,12 @@ router.get('/orders', authMiddleware.isAuthenticated, orderController.getAll)
 router.get('/order/:id', authMiddleware.isAuthenticated, orderController.getById)
 router.post('/order/new', authMiddleware.isAuthenticated, orderController.new)
 router.patch('/order/update', authMiddleware.isAuthenticated, orderController.update)
+router.post('/order/purchase', authMiddleware.isAuthenticated, orderController.purchase)
 
 router.get('/cart', authMiddleware.isAuthenticated, cartController.get)
 router.post('/cart/add', authMiddleware.isAuthenticated, cartController.add)
 router.patch('/cart/update', authMiddleware.isAuthenticated, cartController.update)
+router.post('/cart/purchase', authMiddleware.isAuthenticated, cartController.purchase)
 
 /*
 POST: "/product/buy"           // {} amount

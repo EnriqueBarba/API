@@ -4,6 +4,7 @@ const paymentSchema = new mongoose.Schema({
       order: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Order',
+        unique: true,
         required: true
       },
       paid: {

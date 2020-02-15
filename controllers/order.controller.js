@@ -6,6 +6,7 @@ module.exports.getAll = (req,res,next) => {
     Order.find({user: req.session.user.id})
         .populate('user')
         .populate('product')
+        .populate('payment')
         .then(orders => res.json(orders))
         .catch(next)
 }
@@ -14,6 +15,7 @@ module.exports.getById = (req,res,next) => {
     Order.findById(req.params.id)
         .populate('user')
         .populate('product')
+        .populate('payment')
         .then(o => res.json(o))
         .catch(next)
 }
@@ -40,7 +42,14 @@ module.exports.update = (req,res,next) => {
 
 // ?¿?¿?
 module.exports.purchase = (req,res,next) => {
-    res.json('Working on it.')
+    const payment = new Payment({
+        order: req.body.order
+    })
+    payment.save()
+        .then(p =>{
+            res.status(201).json(p)
+        })
+        .catch(next)  
 }
 
 module.exports.cancelPurchase = (req,res,next) => {

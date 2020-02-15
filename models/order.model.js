@@ -36,6 +36,13 @@ const orderSchema = new mongoose.Schema({
     }
 })
 
+orderSchema.virtual('payment', {
+    ref:'Payment',
+    localField: '_id',
+    foreignField: 'order',
+    justOne:true
+})
+
 orderSchema.methods.totalPrice = () => {
     return Number(this.ammount) * Number(this.buyingPrice);
 }
