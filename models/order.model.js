@@ -22,9 +22,6 @@ const orderSchema = new mongoose.Schema({
         required:true,
         min: 0
     }
-    /*
-    paid: boolean
-    */
 },
 {
     timestamps:true,
@@ -38,6 +35,10 @@ const orderSchema = new mongoose.Schema({
           }
     }
 })
+
+orderSchema.methods.totalPrice = () => {
+    return Number(this.ammount) * Number(this.buyingPrice);
+}
 
 const Order = mongoose.model('Order', orderSchema);
 

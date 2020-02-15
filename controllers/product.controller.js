@@ -70,11 +70,3 @@ module.exports.searchByCat = (req,res,next) => {
         .then(prods => res.json(prods))
         .catch(next)
 }
-
-module.exports.purchase = (req,res,next) => {
-    res.json('Working on it.')
-}
-
-module.exports.cancelPurchase = (req,res,next) => {
-    res.json('Working on it.')
-}

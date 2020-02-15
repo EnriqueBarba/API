@@ -1,14 +1,19 @@
 const Order = require('../models/order.model');
+const Payment = require('../models/payment.model');
 const createError = require('http-errors');
 
 module.exports.getAll = (req,res,next) => {
     Order.find({user: req.session.user.id})
+        .populate('user')
+        .populate('product')
         .then(orders => res.json(orders))
         .catch(next)
 }
 
 module.exports.getById = (req,res,next) => {
     Order.findById(req.params.id)
+        .populate('user')
+        .populate('product')
         .then(o => res.json(o))
         .catch(next)
 }
@@ -31,4 +36,13 @@ module.exports.update = (req,res,next) => {
     .then(o => res.status(201).json(o))
     .catch(next)
     
+}
+
+// ?¿?¿?
+module.exports.purchase = (req,res,next) => {
+    res.json('Working on it.')
+}
+
+module.exports.cancelPurchase = (req,res,next) => {
+    res.json('Working on it.')
 }
