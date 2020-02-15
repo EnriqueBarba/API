@@ -50,6 +50,13 @@ module.exports.getAll = (req,res,next) => {
         .catch(next)
 }
 
+module.exports.getById = (req,res,next) => {
+    
+    Product.findById(req.params.id)
+        .then(prod => res.json(prod))
+        .catch(next)
+}
+
 module.exports.searchByCat = (req,res,next) => {
     
     const criteria = {};
@@ -62,5 +69,12 @@ module.exports.searchByCat = (req,res,next) => {
     Product.find(criteria)
         .then(prods => res.json(prods))
         .catch(next)
+}
 
+module.exports.purchase = (req,res,next) => {
+    res.json('Working on it.')
+}
+
+module.exports.cancelPurchase = (req,res,next) => {
+    res.json('Working on it.')
 }
