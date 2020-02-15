@@ -25,21 +25,37 @@ module.exports.add = (req,res,next) =>{
     Cart.findOne({user: req.session.user.id})
         .then(c => {
             if (c) {
-                c.order = [...c.order, req.body.order]
-                c.save()
-                .then(c => res.status(201).json(c))
-                .catch(next)
-                /*Cart.findByIdAndUpdate(c.id, {order: req.body.order}, {new:true})
-                    .then(c => res.status(201).json(c))
-                    .catch(next)*/
-                
-            } else {
-                const cart = new Cart({
+                const order = new Order({
                     user: req.session.user.id,
-                    order: [req.body.order]
+                    product: req.body.product,
+                    ammount: req.body.ammount,
+                    buyingPrice: req.body.price
                 })
-                cart.save()
-                    .then(c => res.status(201).json(c))
+                order.save()
+                    .then(o => {
+                        c.order = [...c.order, o.id]
+                        c.save()
+                            .then(c => res.status(201).json(c))
+                            .catch(next)
+                    })
+                    .catch(next)
+            } else {
+                const order = new Order({
+                    user: req.session.user.id,
+                    product: req.body.product,
+                    ammount: req.body.ammount,
+                    buyingPrice: req.body.price
+                })
+                order.save()
+                    .then(o => {
+                        const cart = new Cart({
+                            user: req.session.user.id,
+                            order: [o.id]
+                        })
+                    cart.save()
+                        .then(c => res.status(201).json(c))
+                        .catch(next)
+                    })
                     .catch(next)
             }
         })
