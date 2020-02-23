@@ -6,6 +6,7 @@ module.exports.new = (req,res,next) => {
     const prod = new Product({
         owner: req.session.user.id,
         name: req.body.name,
+        description: req.body.description,
         images: req.files ? req.files.map(file => file.secure_url) : '',
         price: req.body.price,
         totalAmmount: req.body.totalAmmount,
@@ -21,6 +22,7 @@ module.exports.new = (req,res,next) => {
 module.exports.update = (req,res,next) => {
     const prod = {
         name: req.body.name,
+        description: req.body.description,
         images: req.files ? req.files.map(file => file.secure_url) : '',
         price: req.body.price,
         totalAmmount: req.body.totalAmmount,
@@ -50,9 +52,9 @@ module.exports.getAll = (req,res,next) => {
         .catch(next)
 }
 
-module.exports.getById = (req,res,next) => {
+module.exports.getByFlag = (req,res,next) => {
     
-    Product.findById(req.params.id)
+    Product.findOne({flag: req.params.flag})
         .then(prod => res.json(prod))
         .catch(next)
 }

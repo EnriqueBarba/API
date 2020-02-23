@@ -15,6 +15,9 @@ const productSchema = new mongoose.Schema({
     flag: {
         type: String
         },
+    description:{
+        type: String
+        },
     images: {
         type: [String],
         required: [true, 'At least one image is required']
@@ -63,7 +66,7 @@ productSchema.pre('save', function (next) {
   });
 
 productSchema.methods.generateFlag = function (name) {
-    return name.replace(/[^A-Z0-9]/ig, "_") + Math.random().toString(36).substr(2,9);
+    return name.replace(/[^A-Z0-9]/ig, "_") + '_' +Math.random().toString(36).substr(2,9);
 }
 
 const Product = mongoose.model('Product', productSchema);

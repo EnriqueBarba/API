@@ -21,7 +21,6 @@ module.exports.new = (req,res,next) => {
 }
 
 module.exports.login = (req,res,next) => {
-    
     const { email,password } = req.body;
     
     if (!email || !password) {

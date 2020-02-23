@@ -17,7 +17,7 @@ router.patch('/profile', authMiddleware.isAuthenticated, userController.updatePr
 
 router.get('/search/:cat', productController.searchByCat)
 router.get('/products', productController.getAll)
-router.get('/product/:id', productController.getById)
+router.get('/product/:flag', productController.getByFlag)
 router.post('/product/new', authMiddleware.isAuthenticated, upload.array('image'), productController.new)
 router.post('/product/update', authMiddleware.isAuthenticated, upload.array('image'), productController.update)
 router.delete('/product/delete', authMiddleware.isAuthenticated, productController.delete)
