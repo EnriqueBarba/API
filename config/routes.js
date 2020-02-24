@@ -13,7 +13,7 @@ router.post('/login', authMiddleware.isNotAuthenticated, userController.login);
 router.post('/logout', authMiddleware.isAuthenticated, userController.logout);
 
 //router.get('/profile', authMiddleware.isAuthenticated, userController.getProfile);
-router.patch('/profile', authMiddleware.isAuthenticated, userController.updateProfile);
+router.post('/profile', authMiddleware.isAuthenticated, userController.updateProfile);
 
 router.get('/search/:cat', productController.searchByCat)
 router.get('/products', productController.getAll)

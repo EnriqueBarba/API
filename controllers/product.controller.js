@@ -20,14 +20,26 @@ module.exports.new = (req,res,next) => {
 } 
 
 module.exports.update = (req,res,next) => {
-    const prod = {
-        name: req.body.name,
-        description: req.body.description,
-        images: req.files ? req.files.map(file => file.secure_url) : '',
-        price: req.body.price,
-        totalAmmount: req.body.totalAmmount,
-        ammountLeft: req.body.ammountLeft,
-        categories: req.body.categories
+    let prod = {}
+    if (req.fieles) {
+        prod = {
+            name: req.body.name,
+            description: req.body.description,
+            images: req.files.map(file => file.secure_url),
+            price: req.body.price,
+            totalAmmount: req.body.totalAmmount,
+            ammountLeft: req.body.ammountLeft,
+            categories: req.body.categories
+        }
+    } else {
+        prod = {
+            name: req.body.name,
+            description: req.body.description,
+            price: req.body.price,
+            totalAmmount: req.body.totalAmmount,
+            ammountLeft: req.body.ammountLeft,
+            categories: req.body.categories
+        }
     }
 
     Product.findByIdAndUpdate(req.body.id, prod, {new:true})

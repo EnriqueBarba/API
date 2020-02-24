@@ -52,16 +52,21 @@ module.exports.logout = (req, res) => {
 }
 
 module.exports.updateProfile = (req, res, next) => {
-  
-  const pass = req.body.currentPassword
 
-  User.findByIdAndUpdate(req.session.user.id, req.body, { new: true })
+  User.findById(req.session.user.id)
 		.then(
 			user => {
 				if (!user) {
 					throw createError(404, 'User not found');
 				} else {
-					res.json(user);
+          user.fullName = req.body.fullName
+          user.email = req.body.email
+          user.password = req.body.password
+          user.address.country = req.body.country
+          user.address.postalCode = req.body.postalCode
+          user.address.street = req.body.street
+          user.save().then(u => res.json(u))
+					
 				}
 			}
 		)

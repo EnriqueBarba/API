@@ -83,8 +83,6 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre('save', function (next) {
     const user = this;
-  
-    if (user.isModified('password')) {
       bcrypt.genSalt(SALT_WORK_FACTOR)
         .then(salt => {
           return bcrypt.hash(user.password, salt)
@@ -94,9 +92,6 @@ userSchema.pre('save', function (next) {
             });
         })
         .catch(error => next(error));
-    } else {
-      next();
-    }
   });
   
   userSchema.methods.checkPassword = function (password) {
