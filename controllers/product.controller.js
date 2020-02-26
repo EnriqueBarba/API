@@ -11,7 +11,7 @@ module.exports.new = (req,res,next) => {
         price: req.body.price,
         totalAmmount: req.body.totalAmmount,
         ammountLeft: req.body.ammountLeft,
-        categories: req.body.categories
+        categories: req.body.categories.split(',').map(e => e)
     })
     prod.save()
     .then(prod => res.status(201).json(prod))
@@ -21,7 +21,7 @@ module.exports.new = (req,res,next) => {
 
 module.exports.update = (req,res,next) => {
     let prod = {}
-    if (req.fieles) {
+    if (req.files) {
         prod = {
             name: req.body.name,
             description: req.body.description,
