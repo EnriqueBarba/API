@@ -11,7 +11,13 @@ const createError = require('http-errors');
 module.exports.get = (req,res,next) =>{
     
     Cart.findOne({user: req.session.user.id})
-        .populate('order')
+    .populate({
+        path: 'order',
+        populate: {
+          path: 'product',
+          populate: 'owner'
+        }
+      })
         .then(c => {
             if (c) {
                 res.status(201).json(c)
@@ -70,7 +76,13 @@ module.exports.add = (req,res,next) =>{
 
 module.exports.update = (req,res,next) => {
     Cart.findByIdAndUpdate(req.body.id, req.body, {new:true})
-        .populate('order')
+        .populate({
+            path: 'order',
+            populate: {
+              path: 'product',
+              populate: 'owner'
+            }
+          })
         .then(c => res.json(c))
         .catch(next)
 }
