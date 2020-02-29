@@ -1,5 +1,10 @@
 const Order = require('../models/order.model');
 const Payment = require('../models/payment.model');
+// Stripe
+const keyPublishable = process.env.PUBLISHABLE_STRIPE_KEY;
+const keySecret = process.env.SECRET_STRIPE_KEY;
+const stripe = require("stripe")(keySecret);
+// END Stripe
 const createError = require('http-errors');
 
 module.exports.getAll = (req,res,next) => {
@@ -42,16 +47,44 @@ module.exports.update = (req,res,next) => {
 
 // ?¿?¿?
 module.exports.purchase = (req,res,next) => {
-    const payment = new Payment({
-        order: req.body.order
-    })
-    payment.save()
-        .then(p =>{
-            res.status(201).json(p)
+    console.info('ReqBody ', req.body)
+    const orderId = req.body.order
+    if (orderId) {
+        Order.findById(orderId)
+        .populate('product')
+        .then( order => {
+            const totalPrice = calculateTotal(order.ammount, order.buyingPrice)
+            stripe.customers.create({
+                source: req.body.stripeToken
+            })
+            .then(customer => {
+                stripe.charges.create({
+                    amount: totalPrice,
+                    description: `Buying: ${order.product.name}`,
+                    currency: 'eur',
+                    customer: customer.id
+                })
+            })
+            .then(_ => {
+                const payment = new Payment({
+                    order: req.body.order
+                });
+                return payment
+                .save()
+                .then((p) => {
+                    res.status(201).json(p)
+                })
+            })
+            .catch(console.error)
         })
-        .catch(next)  
+    }
+    
 }
 
 module.exports.cancelPurchase = (req,res,next) => {
     res.json('Working on it.')
+}
+
+const calculateTotal = (ammount, buyingPrice) => {
+    return ammount * buyingPrice *100 // cents
 }
