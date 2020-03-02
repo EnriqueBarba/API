@@ -9,10 +9,13 @@ const createError = require('http-errors');
 
 module.exports.getAll = (req,res,next) => {
     Order.find({user: req.session.user.id})
-        .populate('user')
         .populate('product')
         .populate('payment')
-        .then(orders => res.json(orders))
+        .sort({createdAt: -1})
+        .then(orders => {
+            console.info(orders)
+            res.json(orders)
+        })
         .catch(next)
 }
 
@@ -67,7 +70,8 @@ module.exports.purchase = (req,res,next) => {
             })
             .then(_ => {
                 const payment = new Payment({
-                    order: req.body.order
+                    order: req.body.order,
+                    paid: true
                 });
                 return payment
                 .save()

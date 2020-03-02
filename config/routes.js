@@ -16,6 +16,8 @@ router.post('/logout', authMiddleware.isAuthenticated, userController.logout);
 router.post('/profile', authMiddleware.isAuthenticated, userController.updateProfile);
 
 router.get('/search/:cat', productController.searchByCat)
+router.get('/products/:search', productController.searchByName)
+
 router.get('/products', productController.getAll)
 router.get('/product/:flag', productController.getByFlag)
 router.post('/product/new', authMiddleware.isAuthenticated, upload.array('image'), productController.new)

@@ -21,7 +21,7 @@ module.exports.new = (req,res,next) => {
 
 module.exports.update = (req,res,next) => {
     let prod = {}
-    if (req.files) {
+    if (req.files.length > 0) {
         prod = {
             name: req.body.name,
             description: req.body.description,
@@ -72,7 +72,7 @@ module.exports.getByFlag = (req,res,next) => {
 }
 
 module.exports.searchByCat = (req,res,next) => {
-    
+    console.info(req.params.cat)
     const criteria = {};
     if (req.params.cat) {
       criteria.categories = {
@@ -82,5 +82,21 @@ module.exports.searchByCat = (req,res,next) => {
 
     Product.find(criteria)
         .then(prods => res.json(prods))
+        .catch(next)
+}
+
+module.exports.searchByName = (req,res,next) => {
+
+    const criteria = {};
+    if (req.params.search) {
+      criteria.name = {
+        $regex: `${req.params.search}*`
+      }
+    }
+
+    Product.find(criteria)
+        .then(prods => {
+            res.json(prods)
+        })
         .catch(next)
 }

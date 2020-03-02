@@ -75,31 +75,61 @@ module.exports.add = (req,res,next) =>{
 }
 
 module.exports.update = (req,res,next) => {
-    Cart.findByIdAndUpdate(req.body.id, req.body, {new:true})
-        .populate({
-            path: 'order',
-            populate: {
-              path: 'product',
-              populate: 'owner'
-            }
-          })
-        .then(c => res.json(c))
+
+    Cart.findOne({user: req.session.user.id})
+        .then(c => {
+            console.info('Cart ', c)
+            c.order = c.order.filter(e => e.toString() !== req.body.orderId)
+            console.info('Cart ', c)
+            c.save()
+            .then(c => {
+                Order.findByIdAndDelete(req.body.orderId).then(_ => {
+                    res.json(c)
+                })
+            })
+        })
         .catch(next)
 }
 
 module.exports.purchase = (req, res, next) => {
     Cart.findOne({user: req.session.user.id})
         .then(c => {
-            Promise.all(c.order).then(o =>{
-                const payment = new Payment({
-                    order: o
+            let totalAmmount = 0;
+            let description = ''
+            c.order.forEach( e => {
+                Order.findById(e)
+                .populate('product')
+                .then( o => {
+                    const totalPrice = calculateTotal(o.ammount, o.buyingPrice)
+                    totalAmmount += totalPrice
+                    description += `Product: ${o.product.name}. `
+
+                    const payment = new Payment({
+                        order: o.id,
+                        paid: true
+                    })
+                    payment.save()
                 })
-                payment.save()
-                }
-            )
+            })
+
+            stripe.customers.create({
+                source: req.body.stripeToken
+            })
+            .then(customer => {
+                stripe.charges.create({
+                    amount: totalAmmount,
+                    description: description,
+                    currency: 'eur',
+                    customer: customer.id
+                })
+            })
+
             c.order = []
             c.save()
-        })
-        .then(() => res.status(201).json())
-        .catch(next)
+            .then(() => res.status(201).json())
+        }).catch(next)
+}
+
+const calculateTotal = (ammount, buyingPrice) => {
+    return ammount * buyingPrice *100 // cents
 }
