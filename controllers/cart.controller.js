@@ -78,13 +78,22 @@ module.exports.update = (req,res,next) => {
 
     Cart.findOne({user: req.session.user.id})
         .then(c => {
-            console.info('Cart ', c)
             c.order = c.order.filter(e => e.toString() !== req.body.orderId)
-            console.info('Cart ', c)
             c.save()
             .then(c => {
                 Order.findByIdAndDelete(req.body.orderId).then(_ => {
-                    res.json(c)
+                    Cart.findOne({user: req.session.user.id})
+                    .populate({
+                        path: 'order',
+                        populate: {
+                          path: 'product',
+                          populate: 'owner'
+                        }
+                      })
+                    .then(c => {
+                        res.json(c)
+                    })
+                    
                 })
             })
         })

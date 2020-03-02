@@ -20,6 +20,7 @@ module.exports.new = (req,res,next) => {
 } 
 
 module.exports.update = (req,res,next) => {
+    console.info(req.body)
     let prod = {}
     if (req.files.length > 0) {
         prod = {
@@ -29,7 +30,7 @@ module.exports.update = (req,res,next) => {
             price: req.body.price,
             totalAmmount: req.body.totalAmmount,
             ammountLeft: req.body.ammountLeft,
-            categories: req.body.categories
+            categories: req.body.categories.split(',')
         }
     } else {
         prod = {
@@ -38,10 +39,10 @@ module.exports.update = (req,res,next) => {
             price: req.body.price,
             totalAmmount: req.body.totalAmmount,
             ammountLeft: req.body.ammountLeft,
-            categories: req.body.categories
+            categories: req.body.categories.split(',')
         }
     }
-
+    console.info('Prod ', prod)
     Product.findByIdAndUpdate(req.body.id, prod, {new:true})
         .then(prod => res.json(prod))
         .catch(next)
@@ -59,7 +60,7 @@ module.exports.delete = (req,res,next) => {
 }
 
 module.exports.getAll = (req,res,next) => {
-    Product.find({})
+    Product.find({}).sort({createdAt: -1})
         .then(prods => res.json(prods))
         .catch(next)
 }
@@ -67,7 +68,7 @@ module.exports.getAll = (req,res,next) => {
 module.exports.getByFlag = (req,res,next) => {
     
     Product.findOne({flag: req.params.flag})
-        .then(prod => res.json(prod))
+        .then(prod => console.info(prod) || res.json(prod))
         .catch(next)
 }
 
@@ -76,11 +77,11 @@ module.exports.searchByCat = (req,res,next) => {
     const criteria = {};
     if (req.params.cat) {
       criteria.categories = {
-        $all: req.params.cat.split(',')
+        $all: req.params.cat
       }
     }
 
-    Product.find(criteria)
+    Product.find(criteria).sort({createdAt: -1})
         .then(prods => res.json(prods))
         .catch(next)
 }
@@ -94,7 +95,7 @@ module.exports.searchByName = (req,res,next) => {
       }
     }
 
-    Product.find(criteria)
+    Product.find(criteria).sort({createdAt: -1})
         .then(prods => {
             res.json(prods)
         })
