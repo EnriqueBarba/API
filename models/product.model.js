@@ -40,6 +40,11 @@ const productSchema = new mongoose.Schema({
         type: [String],
         enum: CATEGORIES.map(e => e.name),
         default: []
+    },
+    disabled: {
+        type: Boolean,
+        default:false,
+        required: true
     }
 },
 {

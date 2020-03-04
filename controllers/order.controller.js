@@ -13,7 +13,6 @@ module.exports.getAll = (req,res,next) => {
         .populate('payment')
         .sort({createdAt: -1})
         .then(orders => {
-            console.info(orders)
             res.json(orders)
         })
         .catch(next)
@@ -50,7 +49,7 @@ module.exports.update = (req,res,next) => {
 
 // ?¿?¿?
 module.exports.purchase = (req,res,next) => {
-    console.info('ReqBody ', req.body)
+    console.info(req.body)
     const orderId = req.body.order
     if (orderId) {
         Order.findById(orderId)

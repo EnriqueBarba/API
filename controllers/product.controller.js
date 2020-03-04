@@ -11,7 +11,8 @@ module.exports.new = (req,res,next) => {
         price: req.body.price,
         totalAmmount: req.body.totalAmmount,
         ammountLeft: req.body.ammountLeft,
-        categories: req.body.categories.split(',').map(e => e)
+        categories: req.body.categories.split(',').map(e => e),
+        disabled: false
     })
     prod.save()
     .then(prod => res.status(201).json(prod))
@@ -49,18 +50,18 @@ module.exports.update = (req,res,next) => {
 }
 
 module.exports.delete = (req,res,next) => {
-    console.info(req.body.owner)
-    if ( req.body.owner === req.session.user.id ) {
-        Product.findByIdAndDelete(req.body.id)
-            .then(() => res.status(204).json())
-            .catch(next)
-    } else {
-        res.status(401).json()
-    }
+    
+    Product.findByIdAndUpdate(req.body.id, {$set: {disabled: true}}, {new:true})
+        .then(p => {
+            console.info(p)  
+                    res.status(204).json(p)
+        })
+        .catch(next)
 }
 
 module.exports.getAll = (req,res,next) => {
-    Product.find({}).sort({createdAt: -1})
+    Product.find({disabled:false})
+        .sort({createdAt: -1})
         .then(prods => res.json(prods))
         .catch(next)
 }
@@ -68,17 +69,18 @@ module.exports.getAll = (req,res,next) => {
 module.exports.getByFlag = (req,res,next) => {
     
     Product.findOne({flag: req.params.flag})
-        .then(prod => console.info(prod) || res.json(prod))
+        .then(prod => res.json(prod))
         .catch(next)
 }
 
 module.exports.searchByCat = (req,res,next) => {
-    console.info(req.params.cat)
     const criteria = {};
     if (req.params.cat) {
       criteria.categories = {
         $all: req.params.cat
       }
+      criteria.disabled = false
+      
     }
 
     Product.find(criteria).sort({createdAt: -1})
@@ -93,6 +95,7 @@ module.exports.searchByName = (req,res,next) => {
       criteria.name = {
         $regex: `${req.params.search}*`
       }
+      criteria.disabled = false
     }
 
     Product.find(criteria).sort({createdAt: -1})
