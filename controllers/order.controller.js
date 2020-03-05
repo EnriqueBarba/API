@@ -1,4 +1,5 @@
 const Order = require('../models/order.model');
+const Cart = require('../models/cart.model');
 const Payment = require('../models/payment.model');
 // Stripe
 const keyPublishable = process.env.PUBLISHABLE_STRIPE_KEY;
@@ -13,7 +14,14 @@ module.exports.getAll = (req,res,next) => {
         .populate('payment')
         .sort({createdAt: -1})
         .then(orders => {
-            res.json(orders)
+            let finalOrders = []
+            Cart.findOne({user: req.session.user.id})
+                .then(c => {
+                    //console.info('Cart ',c)
+                    const cartOrders = c.order.length >= 1 ? c.order.map(o => o._id) : []
+                    finalOrders = orders.filter(e => !cartOrders.includes(e.id))
+                    res.json(finalOrders)
+                })          
         })
         .catch(next)
 }
