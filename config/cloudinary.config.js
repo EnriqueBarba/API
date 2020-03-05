@@ -10,13 +10,11 @@ cloudinary.config({
 
 var storage = cloudinaryStorage({
 	cloudinary: cloudinary,
-	folder: function(req,file,cb) {
-        cb('API',`API/${req.body.email}`)
-    }, // The name of the folder in cloudinary
+	folder:'API',
 	allowedFormats: ['jpg', 'png'],
 	filename: function (req, file, cb) {
-		cb(null, file.originalname); // The file on cloudinary would have the same name as the original file name
-	}
+		cb(null, file.fieldname + '-' + Date.now())
+	  }
 });
 
 const uploadCloud = multer({ storage: storage });
