@@ -55,6 +55,20 @@ module.exports.update = (req,res,next) => {
     
 }
 
+module.exports.delete = (req,res,next) => {
+    Order.findById(req.body.id)
+    .populate('payment')
+    .then(o => {
+       if (o.payment && !o.payment.paid) {
+            o.delete().then(_ =>{
+                res.status(200).json();   
+            })      
+       } 
+    })
+    .catch(next)
+    
+}
+
 // ?¿?¿?
 module.exports.purchase = (req,res,next) => {
     console.info(req.body)
