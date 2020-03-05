@@ -28,6 +28,7 @@ router.get('/orders', authMiddleware.isAuthenticated, orderController.getAll)
 router.get('/order/:id', authMiddleware.isAuthenticated, orderController.getById)
 router.post('/order/new', authMiddleware.isAuthenticated, orderController.new)
 router.patch('/order/update', authMiddleware.isAuthenticated, orderController.update)
+router.post('/order/delete', authMiddleware.isAuthenticated, orderController.delete)
 router.post('/order/purchase', authMiddleware.isAuthenticated, orderController.purchase)
 
 router.get('/cart', authMiddleware.isAuthenticated, cartController.get)
