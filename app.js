@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session);
 
 app.use((req, _, next) => {
-  req.currentUser = req.session.user
+  JSON.stringify(req.currentUser) = JSON.stringify(req.session.user)
   next()
 })
 
