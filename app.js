@@ -24,6 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, _, next) => {
+  console.log('Session app ', req.session)
   req.currentUser = req.session.user
   next()
 })

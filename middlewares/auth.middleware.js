@@ -1,5 +1,6 @@
 
 module.exports.isAuthenticated = (req, res, next) => {
+  console.log('Session ', req.session)
   if (req.session.user) {
     next()
   } else {
