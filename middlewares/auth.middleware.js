@@ -1,6 +1,6 @@
 
 module.exports.isAuthenticated = (req, res, next) => {
-  console.info('Sesion user ', req.session.user)
+  console.log('Sesion user ', req.session.user)
   if (req.session.user) {
     next()
   } else {
@@ -9,7 +9,7 @@ module.exports.isAuthenticated = (req, res, next) => {
 }
 
 module.exports.isNotAuthenticated = (req, _, next) => {
-  console.info('Sesion user ', req.session.user)
+  console.log('Sesion user ', req.session.user)
   if (req.session.user) {
     next(res.status(403).json())
   } else {
