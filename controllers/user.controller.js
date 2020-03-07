@@ -72,10 +72,3 @@ module.exports.updateProfile = (req, res, next) => {
 		)
 		.catch(next);
 }
-
-/*
-module.exports.getProfile = (req, res, next) => {
-  req.session.user
-  res.json();
-}
-*/
