@@ -24,8 +24,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session);
 app.use((req, _, next) => {
-  console.log('REQUEST ', req.session)
-  req.currentUser = req.session.user
+  console.log('REQUEST ', req.user)
+  req.session.user = req.user
   next()
 })
 
