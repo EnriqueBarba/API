@@ -15,7 +15,6 @@ router.post('/register', authMiddleware.isNotAuthenticated, userController.new);
 router.post('/login', authMiddleware.isNotAuthenticated, userController.login);
 router.post('/logout', authMiddleware.isAuthenticated, userController.logout);
 
-//router.get('/profile', authMiddleware.isAuthenticated, userController.getProfile);
 router.post('/profile', authMiddleware.isAuthenticated, userController.updateProfile);
 
 router.get('/search/:cat', productController.searchByCat)

@@ -37,7 +37,7 @@ module.exports.login = (req,res,next) => {
             if (!match) {
               throw createError(400, 'Invalid user or password');
             } else {
-              req.session.user = user;
+              req.session.user = JSON.stringify(user);
               res.json(user);
             }
           })
