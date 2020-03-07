@@ -1,9 +1,8 @@
 const cors = require('cors')
 
-const origin = process.env.CORS_ORIGIN
-
 const corsMiddleware = cors({
-  origin: origin,
+  origin: process.env.CORS_ORIGIN,
+  allowedHeaders: ['Content-Type', 'Origin'],
   credentials: true
 })
 
