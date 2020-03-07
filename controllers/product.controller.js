@@ -21,7 +21,6 @@ module.exports.new = (req,res,next) => {
 } 
 
 module.exports.update = (req,res,next) => {
-    console.info(req.body)
     let prod = {}
     if (req.files.length > 0) {
         prod = {
@@ -43,7 +42,6 @@ module.exports.update = (req,res,next) => {
             categories: req.body.categories.split(',')
         }
     }
-    console.info('Prod ', prod)
     Product.findByIdAndUpdate(req.body.id, prod, {new:true})
         .then(prod => res.json(prod))
         .catch(next)
@@ -53,8 +51,7 @@ module.exports.delete = (req,res,next) => {
     
     Product.findByIdAndUpdate(req.body.id, {$set: {disabled: true}}, {new:true})
         .then(p => {
-            console.info(p)  
-                    res.status(204).json(p)
+            res.status(204).json(p)
         })
         .catch(next)
 }

@@ -55,7 +55,6 @@ app.use(function (error, req, res, next) {
       for (field of Object.keys(error.errors)) {
         error.errors[field] = error.errors[field].message
       }
-  
       data.errors = error.errors
     } else if (error instanceof mongoose.Error.CastError) {
       error = createError(404, 'Resource not found')
@@ -68,28 +67,7 @@ app.use(function (error, req, res, next) {
   /** 
    * Listen on provided port
    */
-  const port = normalizePort(process.env.PORT || '3001');
+  const port = process.env.PORT || '3001';
   app.listen(port, () => {
     console.log(`Listening on port ${port}`);
   });
-  
-  // Helper functions
-  
-  /**
-   * Normalize a port into a number, string, or false.
-   */
-  function normalizePort(val) {
-    const port = parseInt(val, 10);
-  
-    if (isNaN(port)) {
-      // named pipe
-      return val;
-    }
-  
-    if (port >= 0) {
-      // port number
-      return port;
-    }
-  
-    return false;
-  }
