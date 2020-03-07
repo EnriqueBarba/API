@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const controller = require('../controllers/base.controller');
 const userController = require('../controllers/user.controller');
 const productController = require('../controllers/product.controller');
 const cartController = require('../controllers/cart.controller');
@@ -7,6 +8,8 @@ const orderController = require('../controllers/order.controller');
 const upload = require('./cloudinary.config');
 const authMiddleware = require('../middlewares/auth.middleware')
 
+
+router.get('/', controller.base);
 
 router.post('/register', authMiddleware.isNotAuthenticated, userController.new);
 router.post('/login', authMiddleware.isNotAuthenticated, userController.login);
