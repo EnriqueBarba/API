@@ -20,7 +20,7 @@ module.exports.get = (req,res,next) =>{
       })
         .then(c => {
             if (c) {
-                res.status(201).json(c)
+                res.status(200).json(c)
             } else {
                 const cart = new Cart({
                     user: req.session.user.id
