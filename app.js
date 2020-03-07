@@ -18,14 +18,15 @@ const cors = require('./config/cors.config')
 const app = express();
 app.use(cors)
 app.use(logger('dev'));
+app.use(session);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session);
 app.use((req, _, next) => {
-  console.log('REQUEST ', req.user)
-  req.session.user = req.user
+  console.log('REQUEST ', req.session)
+  req.currentUser = req.session.user
+  console.log('REQUEST after ', req.session)
   next()
 })
 
