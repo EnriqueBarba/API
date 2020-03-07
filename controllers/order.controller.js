@@ -9,18 +9,18 @@ const stripe = require("stripe")(keySecret);
 const createError = require('http-errors');
 
 module.exports.getAll = (req,res,next) => {
-    Order.find({user: req.session.user.id})
+    Order.find({user: JSON.parse(req.session.user).id})
         .populate('product')
         .populate('payment')
         .sort({createdAt: -1})
         .then(orders => {
             let finalOrders = []
-            Cart.findOne({user: req.session.user.id})
+            Cart.findOne({user: JSON.parse(req.session.user).id})
                 .then(c => {
                     const cartOrders = c.order.length >= 1 ? c.order.map(o => o._id) : []
                     finalOrders = orders.filter(e => !cartOrders.includes(e.id))
                     res.json(finalOrders)
-                })          
+                }).catch(next)         
         })
         .catch(next)
 }

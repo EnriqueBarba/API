@@ -9,7 +9,8 @@ const stripe = require("stripe")(keySecret);
 const createError = require('http-errors');
 
 module.exports.get = (req,res,next) =>{
-    Cart.findOne({user: req.session.user.id})
+
+    Cart.findOne({user: JSON.parse(req.session.user).id})
     .populate({
         path: 'order',
         populate: {
@@ -33,11 +34,11 @@ module.exports.get = (req,res,next) =>{
 }
 
 module.exports.add = (req,res,next) =>{
-    Cart.findOne({user: req.session.user.id})
+    Cart.findOne({user: JSON.parse(req.session.user).id})
         .then(c => {
             if (c) {
                 const order = new Order({
-                    user: req.session.user.id,
+                    user: JSON.parse(req.session.user).id,
                     product: req.body.product,
                     ammount: req.body.ammount,
                     buyingPrice: req.body.price
@@ -52,7 +53,7 @@ module.exports.add = (req,res,next) =>{
                     .catch(next)
             } else {
                 const order = new Order({
-                    user: req.session.user.id,
+                    user: JSON.parse(req.session.user).id,
                     product: req.body.product,
                     ammount: req.body.ammount,
                     buyingPrice: req.body.price
@@ -60,7 +61,7 @@ module.exports.add = (req,res,next) =>{
                 order.save()
                     .then(o => {
                         const cart = new Cart({
-                            user: req.session.user.id,
+                            user: JSON.parse(req.session.user).id,
                             order: [o.id]
                         })
                     cart.save()
@@ -75,13 +76,13 @@ module.exports.add = (req,res,next) =>{
 
 module.exports.update = (req,res,next) => {
 
-    Cart.findOne({user: req.session.user.id})
+    Cart.findOne({user: JSON.parse(req.session.user).id})
         .then(c => {
             c.order = c.order.filter(e => e.toString() !== req.body.orderId)
             c.save()
             .then(c => {
                 Order.findByIdAndDelete(req.body.orderId).then(_ => {
-                    Cart.findOne({user: req.session.user.id})
+                    Cart.findOne({user: JSON.parse(req.session.user).id})
                     .populate({
                         path: 'order',
                         populate: {
@@ -100,7 +101,7 @@ module.exports.update = (req,res,next) => {
 }
 
 module.exports.purchase = (req, res, next) => {
-    Cart.findOne({user: req.session.user.id})
+    Cart.findOne({user: JSON.parse(req.session.user).id})
         .then(c => {
             let totalAmmount = 0;
             let description = ''
