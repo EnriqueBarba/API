@@ -3,12 +3,12 @@ const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
 const SESSION_MAX_AGE_SECONDS = Number(process.env.SESSION_MAX_AGE_SECONDS) || 60 * 60 * 24 * 7;
 
-module.exports = console.info('Connection ', mongoose.connection) || session({
+module.exports = session({
   secret: process.env.SESSION_SECRET || 'Super Secret (change it)',
-  resave: false,
+  resave: true,
   saveUninitialized: false,
   cookie: {
-    secure: true,
+    secure: false,
     httpOnly: true,
     maxAge: SESSION_MAX_AGE_SECONDS * 1000
   },
