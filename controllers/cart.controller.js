@@ -9,7 +9,9 @@ const stripe = require("stripe")(keySecret);
 const createError = require('http-errors');
 
 module.exports.get = (req,res,next) =>{
-
+    console.info('Cart sess: ' + req.session.user)
+    console.info('Cart sess: ' + JSON.parse(req.session.user).id)
+    
     Cart.findOne({user: JSON.parse(req.session.user).id})
     .populate({
         path: 'order',

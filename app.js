@@ -4,7 +4,7 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
-//const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 
 require('./config/db.config');
@@ -21,7 +21,7 @@ app.use(logger('dev'));
 app.use(session);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-//app.use(cookieParser());
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, _, next) => {
   console.log('Session app ', req.session)
