@@ -27,6 +27,7 @@ module.exports.get = (req,res,next) =>{
                 const cart = new Cart({
                     user: req.session.user.id
                 })
+                console.info("Aqui cart: " + req.session.user.id)
                 cart.save()
                     .then(c => res.status(201).json(c))
                     .catch(next)
