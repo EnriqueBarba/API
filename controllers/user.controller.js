@@ -52,8 +52,8 @@ module.exports.logout = (req, res) => {
 }
 
 module.exports.updateProfile = (req, res, next) => {
-
-  User.findById(req.session.user.id)
+  const userId = JSON.parse(req.session.user).id
+  User.findById(userId)
 		.then(
 			user => {
 				if (!user) {

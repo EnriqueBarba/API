@@ -10,7 +10,6 @@ const createError = require('http-errors');
 
 module.exports.get = (req,res,next) =>{
     const userId = JSON.parse(req.session.user).id
-    console.info('Cart sess: ' + userId)
     Cart.findOne({user: userId})
     .populate({
         path: 'order',
@@ -26,7 +25,6 @@ module.exports.get = (req,res,next) =>{
                 const cart = new Cart({
                     user: userId
                 })
-                console.info("Aqui cart: " + userId)
                 cart.save()
                     .then(c => res.status(201).json(c))
                     .catch(next)
@@ -36,11 +34,12 @@ module.exports.get = (req,res,next) =>{
 }
 
 module.exports.add = (req,res,next) =>{
-    Cart.findOne({user: JSON.parse(req.session.user).id})
+    const userId = JSON.parse(req.session.user).id
+    Cart.findOne({user: userId})
         .then(c => {
             if (c) {
                 const order = new Order({
-                    user: JSON.parse(req.session.user).id,
+                    user: userId,
                     product: req.body.product,
                     ammount: req.body.ammount,
                     buyingPrice: req.body.price
@@ -55,7 +54,7 @@ module.exports.add = (req,res,next) =>{
                     .catch(next)
             } else {
                 const order = new Order({
-                    user: JSON.parse(req.session.user).id,
+                    user: userId,
                     product: req.body.product,
                     ammount: req.body.ammount,
                     buyingPrice: req.body.price
@@ -63,7 +62,7 @@ module.exports.add = (req,res,next) =>{
                 order.save()
                     .then(o => {
                         const cart = new Cart({
-                            user: JSON.parse(req.session.user).id,
+                            user: userId,
                             order: [o.id]
                         })
                     cart.save()

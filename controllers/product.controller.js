@@ -2,9 +2,9 @@ const Product = require('../models/product.model');
 const createError = require('http-errors');
 
 module.exports.new = (req,res,next) => {
-
+    const userId = JSON.parse(req.session.user).id
     const prod = new Product({
-        owner: req.session.user.id,
+        owner: userId,
         name: req.body.name,
         description: req.body.description,
         images: req.files ? req.files.map(file => file.secure_url) : '',

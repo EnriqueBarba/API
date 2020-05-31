@@ -9,13 +9,14 @@ const stripe = require("stripe")(keySecret);
 const createError = require('http-errors');
 
 module.exports.getAll = (req,res,next) => {
-    Order.find({user: JSON.parse(req.session.user).id})
+    const userId = JSON.parse(req.session.user).id
+    Order.find({user: userId})
         .populate('product')
         .populate('payment')
         .sort({createdAt: -1})
         .then(orders => {
             let finalOrders = []
-            Cart.findOne({user: JSON.parse(req.session.user).id})
+            Cart.findOne({user: userId})
                 .then(c => {
                     const cartOrders = c.order.length >= 1 ? c.order.map(o => o._id) : []
                     finalOrders = orders.filter(e => !cartOrders.includes(e.id))
@@ -36,7 +37,7 @@ module.exports.getById = (req,res,next) => {
 
 module.exports.new = (req,res,next) => {
     const order = new Order({
-        user: req.session.user.id,
+        user: userId,
         product: req.body.product,
         ammount: req.body.ammount,
         buyingPrice: req.body.price
