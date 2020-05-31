@@ -36,6 +36,7 @@ module.exports.getById = (req,res,next) => {
 }
 
 module.exports.new = (req,res,next) => {
+    const userId = req.session.user.id
     const order = new Order({
         user: userId,
         product: req.body.product,
