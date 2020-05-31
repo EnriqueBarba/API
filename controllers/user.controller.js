@@ -52,7 +52,7 @@ module.exports.logout = (req, res) => {
 }
 
 module.exports.updateProfile = (req, res, next) => {
-  const userId = JSON.parse(req.session.user).id
+  const userId = req.session.user.id
   User.findById(userId)
 		.then(
 			user => {
