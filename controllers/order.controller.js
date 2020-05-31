@@ -9,7 +9,7 @@ const stripe = require("stripe")(keySecret);
 const createError = require('http-errors');
 
 module.exports.getAll = (req,res,next) => {
-    const userId = JSON.parse(req.session.user).id
+    const userId = req.session.user.id
     Order.find({user: userId})
         .populate('product')
         .populate('payment')

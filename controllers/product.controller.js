@@ -2,7 +2,7 @@ const Product = require('../models/product.model');
 const createError = require('http-errors');
 
 module.exports.new = (req,res,next) => {
-    const userId = JSON.parse(req.session.user).id
+    const userId = req.session.user.id
     const prod = new Product({
         owner: userId,
         name: req.body.name,
